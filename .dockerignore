@@ -1,0 +1,6 @@
+# ignore .git
+.git
+
+# build files
+./main
+./book-service
