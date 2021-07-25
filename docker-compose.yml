@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  bookapi:
+    container_name: bookapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    networks:
+      - bookapi-netw
+    env_file:
+      - config/app/.env
+    depends_on:
+      - postgresql
+  postgresql:
+    container_name: postgresql
+    image: postgres:latest
+    volumes:
+    - "bookapi-data:/var/lib/postgresql/data"
+    - "./config/db/init.sql:/docker-entrypoint-initdb.d/init.sql"
+    networks:
+      - bookapi-netw
+    env_file:
+      - config/db/env
+
+
+networks:
+  bookapi-netw:
+    driver: bridge
+
+volumes:
+  bookapi-data:
